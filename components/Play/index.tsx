@@ -7,6 +7,8 @@ import {
   Icon,
   Input,
   VStack,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 import { GiChicken } from 'react-icons/gi';
@@ -29,10 +31,13 @@ export const Play = ({ game }: Props): JSX.Element => {
     return `${entry.term1} ${entry.term2} ${entry.term3}`;
   }, [entry]);
 
-  const { mutate, isLoading } = useMutation(() =>
+  const { mutate, isLoading } = useMutation(({ term, termIndex }) =>
     fetch(`/api/game/${game.id}/turn`, {
       method: 'POST',
-      body: JSON.stringify({ term: 'wow', termIndex: 1 }),
+      body: JSON.stringify({
+        term,
+        termIndex,
+      }),
     }).then((r) => r.json())
   );
 
@@ -42,8 +47,22 @@ export const Play = ({ game }: Props): JSX.Element => {
       term,
     },
     onSubmit({ term }) {
-      const [term1, term2, term3] = term.split(' ');
-      mutate();
+      const terms = term.split(' ');
+      const { term1, term2, term3 } = entry;
+      const diff = [term1, term2, term3].map((t) => terms.includes(t));
+      const diffCount = diff.filter(Boolean).length;
+
+      if (diffCount !== 2) {
+        formik.setFieldError('term', 'One word must be changed.');
+        return;
+      }
+
+      const index = diff.indexOf(false);
+
+      mutate({
+        termIndex: index + 1,
+        term: terms[index],
+      });
     },
   });
 
@@ -57,11 +76,14 @@ export const Play = ({ game }: Props): JSX.Element => {
                 It's your turn! change a word!!
               </Text>
               <HStack>
-                <Input
-                  name="term"
-                  onChange={formik.handleChange}
-                  value={formik.values.term}
-                />
+                <FormControl id="term" isInvalid={!!formik.errors.term}>
+                  <Input
+                    name="term"
+                    onChange={formik.handleChange}
+                    value={formik.values.term}
+                  />
+                  <FormErrorMessage>{formik.errors.term}</FormErrorMessage>
+                </FormControl>
                 <Button type="submit" isLoading={isLoading}>
                   Submit
                 </Button>
