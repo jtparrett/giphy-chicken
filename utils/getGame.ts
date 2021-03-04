@@ -1,3 +1,4 @@
+import { Entry, User } from '../types';
 import { client, q } from './fauna';
 
 export const getGame = async (id: string) => {
@@ -5,7 +6,7 @@ export const getGame = async (id: string) => {
     q.Select(['data'], q.Get(q.Ref(q.Collection('games'), id)))
   );
 
-  const users = await client.query(
+  const users: { data: User[] } = await client.query(
     q.Map(
       q.Paginate(
         q.Match(q.Index('users_by_game'), q.Ref(q.Collection('games'), id))
@@ -17,7 +18,7 @@ export const getGame = async (id: string) => {
     )
   );
 
-  const entries = await client.query(
+  const entries: { data: Entry[] } = await client.query(
     q.Map(
       q.Paginate(
         q.Match(q.Index('entries_by_game'), q.Ref(q.Collection('games'), id))
