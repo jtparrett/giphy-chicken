@@ -20,16 +20,10 @@ interface Props {
 export const WaitingRoom = ({ game }: Props): JSX.Element => {
   const GameLink = `https://giphy-chicken.vercel.app/play/${game.id}`;
 
-  const { mutate, isLoading } = useMutation(
-    () =>
-      fetch(`/api/game/${game.id}/start`, {
-        method: 'POST',
-      }).then((r) => r.json()),
-    {
-      onSuccess() {
-        queryClient.refetchQueries(['game', game.id]);
-      },
-    }
+  const { mutate, isLoading } = useMutation(() =>
+    fetch(`/api/game/${game.id}/start`, {
+      method: 'POST',
+    }).then((r) => r.json())
   );
 
   return (

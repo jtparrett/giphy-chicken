@@ -16,29 +16,24 @@ import { Game } from '../../types';
 import { queryClient } from '../../utils';
 import { Card } from '../Card';
 import { useMemo } from 'react';
+import { useUser } from '../../contexts';
 
 interface Props {
   game: Game;
-  userId: string;
 }
 
-export const Play = ({ game, userId }: Props): JSX.Element => {
+export const Play = ({ game }: Props): JSX.Element => {
+  const { user } = useUser();
   const entry = game.entries.data[0];
   const term = useMemo(() => {
     return `${entry.term1} ${entry.term2} ${entry.term3}`;
   }, [entry]);
 
-  const { mutate, isLoading } = useMutation(
-    () =>
-      fetch(`/api/game/${game.id}/turn`, {
-        method: 'POST',
-        body: JSON.stringify({ term: 'wow', termIndex: 1 }),
-      }).then((r) => r.json()),
-    {
-      onSuccess() {
-        queryClient.refetchQueries(['game', game.id]);
-      },
-    }
+  const { mutate, isLoading } = useMutation(() =>
+    fetch(`/api/game/${game.id}/turn`, {
+      method: 'POST',
+      body: JSON.stringify({ term: 'wow', termIndex: 1 }),
+    }).then((r) => r.json())
   );
 
   const formik = useFormik({
@@ -48,7 +43,7 @@ export const Play = ({ game, userId }: Props): JSX.Element => {
     },
     onSubmit({ term }) {
       const [term1, term2, term3] = term.split(' ');
-      console.log(term1, term2, term3);
+      mutate();
     },
   });
 
@@ -56,7 +51,7 @@ export const Play = ({ game, userId }: Props): JSX.Element => {
     <Container py={10} maxW="720px">
       <HStack alignItems="flex-start" spacing={6}>
         <Box flex="1">
-          {userId === game.turnUser.id && (
+          {user.id === game.turnUser.id && (
             <form onSubmit={formik.handleSubmit}>
               <Text fontWeight="bold" mb={2}>
                 It's your turn! change a word!!
