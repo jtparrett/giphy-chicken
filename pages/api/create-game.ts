@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { client, q, GAME_STATES } from '../../utils';
+import randomWords from 'random-words';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -20,7 +21,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       q.Create(q.Collection('games'), {
         data: {
           state: GAME_STATES.UNSTARTED,
-          turn: 0,
         },
       })
     )
@@ -36,6 +36,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
     )
+  );
+
+  const [term1, term2, term3] = randomWords(3);
+  await client.query(
+    q.Create(q.Collection('entries'), {
+      data: {
+        term1,
+        term2,
+        term3,
+        game: q.Ref(q.Collection('games'), gameId),
+      },
+    })
   );
 
   res.status(200).json({

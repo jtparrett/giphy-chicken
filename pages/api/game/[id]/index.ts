@@ -36,10 +36,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       )
     );
 
+    const entries = await client.query(
+      q.Map(
+        q.Paginate(
+          q.Match(q.Index('entries_by_game'), q.Ref(q.Collection('games'), id))
+        ),
+        q.Lambda(
+          'entry',
+          q.Merge(
+            { id: q.Select(['ref', 'id'], q.Get(q.Var('entry'))) },
+            q.Select(['data'], q.Get(q.Var('entry')))
+          )
+        )
+      )
+    );
+
+    const turnUser = users.data[entries.data.length % users.data.length];
+
     res.status(200).json({
       id,
       ...gameData,
+      turnUser,
       users,
+      entries,
     });
   } catch {
     res.status(404).send('Page not found.');

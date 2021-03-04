@@ -1,10 +1,11 @@
-import { Button, Container, Icon, VStack, Text } from '@chakra-ui/react';
+import { Button, Container, Box, VStack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
-import { GiChicken } from 'react-icons/gi';
+
+import { Logo } from '../components';
 
 const Home = (): JSX.Element => (
   <Container maxW="320px" py={10}>
-    <Icon as={GiChicken} w={10} h={10} display="block" mx="auto" my={8} />
+    <Logo />
     <VStack alignItems="stretch">
       <Text textAlign="center">Welcome to Giphy Chicken!</Text>
       <Link href="/how-to" passHref>

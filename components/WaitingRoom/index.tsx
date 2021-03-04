@@ -6,23 +6,14 @@ import {
   VStack,
   Alert,
   Link,
-  Box,
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 
-interface User {
-  name: string;
-  id: string;
-}
+import { Card } from '../Card';
+import { Game } from '../../types';
 
 interface Props {
-  game: {
-    id: string;
-    turn: number;
-    users: {
-      data: User[];
-    };
-  };
+  game: Game;
 }
 
 export const WaitingRoom = ({ game }: Props): JSX.Element => {
@@ -47,20 +38,14 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
           </Text>
         </Alert>
 
-        <Box
-          p={6}
-          borderWidth="1px"
-          borderColor="gray.300"
-          borderStyle="solid"
-          borderRadius="md"
-        >
+        <Card>
           <Heading as="h1" size="md" mb={2}>
             Waiting for players...
           </Heading>
           {game.users.data.map((user) => (
             <Text key={user.id}>{user.name}</Text>
           ))}
-        </Box>
+        </Card>
 
         <Button
           colorScheme="blue"

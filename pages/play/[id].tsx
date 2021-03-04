@@ -49,7 +49,7 @@ const PlayID = (): JSX.Element => {
   }
 
   if (data?.state === GAME_STATES.PLAYING) {
-    return <Play game={data} />;
+    return <Play game={data} userId={userId} />;
   }
 
   return <Error statusCode={404} />;
