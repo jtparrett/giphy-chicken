@@ -15,13 +15,17 @@ import { GiChicken } from 'react-icons/gi';
 import { useFormik } from 'formik';
 
 import { Game } from '../../types';
-import { queryClient } from '../../utils';
 import { Card } from '../Card';
 import { useMemo } from 'react';
 import { useUser } from '../../contexts';
 
 interface Props {
   game: Game;
+}
+
+interface TurnParams {
+  term: string;
+  termIndex: number;
 }
 
 export const Play = ({ game }: Props): JSX.Element => {
@@ -31,14 +35,15 @@ export const Play = ({ game }: Props): JSX.Element => {
     return `${entry.term1} ${entry.term2} ${entry.term3}`;
   }, [entry]);
 
-  const { mutate, isLoading } = useMutation(({ term, termIndex }) =>
-    fetch(`/api/game/${game.id}/turn`, {
-      method: 'POST',
-      body: JSON.stringify({
-        term,
-        termIndex,
-      }),
-    }).then((r) => r.json())
+  const { mutate, isLoading } = useMutation<Game, unknown, TurnParams>(
+    ({ term, termIndex }) =>
+      fetch(`/api/game/${game.id}/turn`, {
+        method: 'POST',
+        body: JSON.stringify({
+          term,
+          termIndex,
+        }),
+      }).then((r) => r.json())
   );
 
   const formik = useFormik({
