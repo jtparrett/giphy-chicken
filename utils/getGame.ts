@@ -25,7 +25,9 @@ export const getGame = async (id: string) => {
       q.Lambda(
         'entry',
         q.Merge(
-          { id: q.Select(['ref', 'id'], q.Get(q.Var('entry'))) },
+          {
+            id: q.Select(['ref', 'id'], q.Get(q.Var('entry'))),
+          },
           q.Select(['data'], q.Get(q.Var('entry')))
         )
       )

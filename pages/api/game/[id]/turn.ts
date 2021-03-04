@@ -51,14 +51,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   );
   const { term1, term2, term3 } = entries.data[0];
 
+  const newTerms = {
+    term1,
+    term2,
+    term3,
+    [`term${body.termIndex}`]: body.term,
+  };
+
+  const gifs = await fetch(
+    `https://api.giphy.com/v1/gifs/search?api_key=8O4q2ZMfKYwAuYS9d9IPrqvHbaqoTFYG&limit=1&q=${newTerms.term1}%20${newTerms.term2}%20${newTerms.term3}`
+  ).then((r) => r.json());
+
   await client.query(
     q.Create(q.Collection('entries'), {
       data: {
-        term1,
-        term2,
-        term3,
-        [`term${body.termIndex}`]: body.term,
+        ...newTerms,
         game: gameRef,
+        giphyId: gifs.data[0].id,
       },
     })
   );

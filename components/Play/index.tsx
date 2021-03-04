@@ -96,11 +96,21 @@ export const Play = ({ game }: Props): JSX.Element => {
             </form>
           )}
           <VStack pt={8} alignItems="flex-start">
-            {game.entries.data?.map((entry) => (
-              <Text key={entry.id}>
-                {entry.term1} {entry.term2} {entry.term3}
-              </Text>
-            ))}
+            {game.entries.data?.map(
+              (entry) =>
+                entry.giphyId && (
+                  <Box key={entry.id}>
+                    <Text>
+                      {entry.term1} {entry.term2} {entry.term3}
+                    </Text>
+                    <Box
+                      as="img"
+                      maxW="full"
+                      src={`https://media.giphy.com/media/${entry.giphyId}/giphy.gif`}
+                    />
+                  </Box>
+                )
+            )}
           </VStack>
         </Box>
         <Box w="200px" position="sticky" top={4}>

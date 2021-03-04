@@ -11,7 +11,7 @@ export interface Entry {
   term1: string;
   term2: string;
   term3: string;
-  giphyUrl: string;
+  giphyId: string;
   user: User;
 }
 
