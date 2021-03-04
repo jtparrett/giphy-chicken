@@ -53,7 +53,7 @@ const CreateGame = (): JSX.Element => {
   });
 
   return (
-    <Container as="main" py={10}>
+    <Container as="main" py={10} maxW="380px">
       <form onSubmit={formik.handleSubmit}>
         <VStack alignItems="stretch">
           <FormControl id="name" isInvalid={!!formik.errors.name}>

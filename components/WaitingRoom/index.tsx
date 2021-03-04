@@ -11,6 +11,7 @@ import { useMutation } from 'react-query';
 
 import { Card } from '../Card';
 import { Game } from '../../types';
+import { queryClient } from '../../utils';
 
 interface Props {
   game: Game;
@@ -19,10 +20,16 @@ interface Props {
 export const WaitingRoom = ({ game }: Props): JSX.Element => {
   const GameLink = `https://giphy-chicken.vercel.app/play/${game.id}`;
 
-  const { mutate, isLoading } = useMutation(() =>
-    fetch(`/api/game/${game.id}/start`, {
-      method: 'POST',
-    }).then((r) => r.json())
+  const { mutate, isLoading } = useMutation(
+    () =>
+      fetch(`/api/game/${game.id}/start`, {
+        method: 'POST',
+      }).then((r) => r.json()),
+    {
+      onSuccess() {
+        queryClient.refetchQueries(['game', game.id]);
+      },
+    }
   );
 
   return (

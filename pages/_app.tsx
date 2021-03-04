@@ -1,8 +1,8 @@
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AppProps } from 'next/app';
 
-const queryClient = new QueryClient();
+import { queryClient } from '../utils';
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
