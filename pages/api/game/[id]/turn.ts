@@ -58,8 +58,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   const gifs = await fetch(
-    `https://api.giphy.com/v1/gifs/search?api_key=8O4q2ZMfKYwAuYS9d9IPrqvHbaqoTFYG&limit=1&q=${newTerms.term1}%20${newTerms.term2}%20${newTerms.term3}`
+    `https://api.giphy.com/v1/gifs/search?api_key=8O4q2ZMfKYwAuYS9d9IPrqvHbaqoTFYG&limit=100&q=${newTerms.term1}%20${newTerms.term2}%20${newTerms.term3}`
   ).then((r) => r.json());
+
+  const gifIndex = Math.floor(Math.random() * 100);
 
   const entry = await client.query(
     q.Select(
@@ -68,7 +70,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           ...newTerms,
           game: gameRef,
-          giphyId: gifs.data[0].id,
+          giphyId: gifs.data[gifIndex].id,
         },
       })
     )
