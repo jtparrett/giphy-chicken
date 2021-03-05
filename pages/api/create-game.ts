@@ -28,6 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         term2,
         term3,
         game: q.Ref(q.Collection('games'), gameId),
+        giphyId: 'xT8qB2zDVGj7ly4moU',
       },
     })
   );

@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Ably from 'ably/promises';
 
-import { client, getGame, q } from '../../../../utils';
+import { client, q } from '../../../../utils';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const id = Array.isArray(req.query.id) ? undefined : req.query.id;
@@ -36,12 +35,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
     )
   );
-
-  const gameUpdate = await getGame(id);
-  const ably = new Ably.Realtime('JZAjwg.MUUy-g:UCgDV0EqQBMaIIJo');
-  const channel = ably.channels.get(id);
-
-  channel.publish('update', gameUpdate);
 
   res.status(200).json({
     id: userId,

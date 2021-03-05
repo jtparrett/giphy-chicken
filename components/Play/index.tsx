@@ -18,6 +18,7 @@ import { Game } from '../../types';
 import { Card } from '../Card';
 import { useMemo } from 'react';
 import { useUser } from '../../contexts';
+import { queryClient } from '../../utils';
 
 interface Props {
   game: Game;
@@ -43,7 +44,12 @@ export const Play = ({ game }: Props): JSX.Element => {
           term,
           termIndex,
         }),
-      }).then((r) => r.json())
+      }).then((r) => r.json()),
+    {
+      onSuccess() {
+        queryClient.refetchQueries(['game', game.id]);
+      },
+    }
   );
 
   const formik = useFormik({
@@ -75,42 +81,49 @@ export const Play = ({ game }: Props): JSX.Element => {
     <Container py={10} maxW="720px">
       <HStack alignItems="flex-start" spacing={6}>
         <Box flex="1">
-          {user.id === game.turnUser.id && (
-            <form onSubmit={formik.handleSubmit}>
-              <Text fontWeight="bold" mb={2}>
-                It's your turn! change a word!!
-              </Text>
-              <HStack>
-                <FormControl id="term" isInvalid={!!formik.errors.term}>
-                  <Input
-                    name="term"
-                    onChange={formik.handleChange}
-                    value={formik.values.term}
-                  />
-                  <FormErrorMessage>{formik.errors.term}</FormErrorMessage>
-                </FormControl>
-                <Button type="submit" isLoading={isLoading}>
-                  Submit
-                </Button>
-              </HStack>
-            </form>
+          {user ? (
+            <>
+              {user?.id === game.turnUser.id ? (
+                <form onSubmit={formik.handleSubmit}>
+                  <Text fontWeight="bold" mb={2}>
+                    It's your turn! change a word!!
+                  </Text>
+                  <HStack>
+                    <FormControl id="term" isInvalid={!!formik.errors.term}>
+                      <Input
+                        name="term"
+                        onChange={formik.handleChange}
+                        value={formik.values.term}
+                      />
+                      <FormErrorMessage>{formik.errors.term}</FormErrorMessage>
+                    </FormControl>
+                    <Button type="submit" isLoading={isLoading}>
+                      Submit
+                    </Button>
+                  </HStack>
+                </form>
+              ) : (
+                <Text fontWeight="bold">It's not your turn just yet...</Text>
+              )}
+            </>
+          ) : (
+            <Text fontWeight="bold">
+              Game already in progress, feel free to spectate...
+            </Text>
           )}
           <VStack pt={8} alignItems="flex-start">
-            {game.entries.data?.map(
-              (entry) =>
-                entry.giphyId && (
-                  <Box key={entry.id}>
-                    <Text>
-                      {entry.term1} {entry.term2} {entry.term3}
-                    </Text>
-                    <Box
-                      as="img"
-                      maxW="full"
-                      src={`https://media.giphy.com/media/${entry.giphyId}/giphy.gif`}
-                    />
-                  </Box>
-                )
-            )}
+            {game.entries.data?.map((entry) => (
+              <Box key={entry.id}>
+                <Text>
+                  {entry.term1} {entry.term2} {entry.term3}
+                </Text>
+                <Box
+                  as="img"
+                  maxW="full"
+                  src={`https://media.giphy.com/media/${entry.giphyId}/giphy.gif`}
+                />
+              </Box>
+            ))}
           </VStack>
         </Box>
         <Box w="200px" position="sticky" top={4}>

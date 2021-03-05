@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Error from 'next/error';
 import { useQuery } from 'react-query';
 import { Spinner, Container } from '@chakra-ui/react';
-import Ably from 'ably/promises';
 
-import { GAME_STATES, queryClient } from '../../utils';
+import { GAME_STATES } from '../../utils';
 import { JoinGame, WaitingRoom, Play } from '../../components';
 import { useUser } from '../../contexts';
-
-const ably = new Ably.Realtime('JZAjwg.3hMZ6w:qSUHBHjOURtVKX5Q');
 
 const PlayID = (): JSX.Element => {
   const router = useRouter();
@@ -20,25 +16,20 @@ const PlayID = (): JSX.Element => {
     ['game', gameId],
     () => fetch(`/api/game/${gameId}`).then((r) => r.json()),
     {
-      enabled: !!user,
+      refetchInterval: 5000,
     }
   );
 
-  const onMessage = ({ data }) => {
-    queryClient.setQueryData(['game', gameId], data);
-  };
-
-  useEffect(() => {
-    const channel = ably.channels.get(gameId);
-    channel.subscribe('update', onMessage);
-
-    return () => {
-      channel.unsubscribe(onMessage);
-    };
-  }, [user]);
+  if (data?.state === GAME_STATES.PLAYING) {
+    return <Play game={data} />;
+  }
 
   if (!user) {
     return <JoinGame gameId={gameId} />;
+  }
+
+  if (data?.state === GAME_STATES.UNSTARTED) {
+    return <WaitingRoom game={data} />;
   }
 
   if (isLoading) {
@@ -47,14 +38,6 @@ const PlayID = (): JSX.Element => {
         <Spinner size="xl" color="blue.500" />
       </Container>
     );
-  }
-
-  if (data?.state === GAME_STATES.UNSTARTED) {
-    return <WaitingRoom game={data} />;
-  }
-
-  if (data?.state === GAME_STATES.PLAYING) {
-    return <Play game={data} />;
   }
 
   return <Error statusCode={404} />;

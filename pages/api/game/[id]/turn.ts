@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Ably from 'ably/promises';
 
 import { Entry } from '../../../../types';
-import { client, getGame, q } from '../../../../utils';
+import { client, q } from '../../../../utils';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const id = Array.isArray(req.query.id) ? undefined : req.query.id;
@@ -62,21 +61,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     `https://api.giphy.com/v1/gifs/search?api_key=8O4q2ZMfKYwAuYS9d9IPrqvHbaqoTFYG&limit=1&q=${newTerms.term1}%20${newTerms.term2}%20${newTerms.term3}`
   ).then((r) => r.json());
 
-  await client.query(
-    q.Create(q.Collection('entries'), {
-      data: {
-        ...newTerms,
-        game: gameRef,
-        giphyId: gifs.data[0].id,
-      },
-    })
+  const entry = await client.query(
+    q.Select(
+      ['data'],
+      q.Create(q.Collection('entries'), {
+        data: {
+          ...newTerms,
+          game: gameRef,
+          giphyId: gifs.data[0].id,
+        },
+      })
+    )
   );
 
-  const gameUpdate = await getGame(id);
-  const ably = new Ably.Realtime('JZAjwg.MUUy-g:UCgDV0EqQBMaIIJo');
-  const channel = ably.channels.get(id);
-
-  channel.publish('update', gameUpdate);
-
-  res.status(200).json(gameUpdate);
+  res.status(200).json(entry);
 };
