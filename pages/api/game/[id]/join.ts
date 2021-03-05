@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Game } from '../../../../types';
 
-import { client, q } from '../../../../utils';
+import { client, GAME_STATES, q } from '../../../../utils';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const id = Array.isArray(req.query.id) ? undefined : req.query.id;
@@ -17,9 +18,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const game = await client.query(q.Get(q.Ref(q.Collection('games'), id)));
+  const game: Game = await client.query(
+    q.Select(['data'], q.Get(q.Ref(q.Collection('games'), id)))
+  );
 
-  if (!game) {
+  if (!game || game.state === GAME_STATES.PLAYING) {
     res.status(404).send('Page not found.');
     return;
   }

@@ -12,6 +12,7 @@ import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
 import { useUser } from '../../contexts';
+import { queryClient } from '../../utils';
 
 interface Props {
   gameId: string;
@@ -41,6 +42,7 @@ export const JoinGame = ({ gameId }: Props): JSX.Element => {
     {
       onSuccess(user) {
         setUser(user);
+        queryClient.refetchQueries(['game', gameId]);
       },
     }
   );
