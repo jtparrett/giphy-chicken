@@ -1,6 +1,7 @@
 import {
   Container,
   HStack,
+  Stack,
   Text,
   Box,
   Button,
@@ -9,6 +10,9 @@ import {
   VStack,
   FormControl,
   FormErrorMessage,
+  Alert,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 import { GiChicken } from 'react-icons/gi';
@@ -79,54 +83,8 @@ export const Play = ({ game }: Props): JSX.Element => {
 
   return (
     <Container py={10} maxW="720px">
-      <HStack alignItems="flex-start" spacing={6}>
-        <Box flex="1">
-          {user ? (
-            <>
-              {user?.id === game.turnUser.id ? (
-                <form onSubmit={formik.handleSubmit}>
-                  <Text fontWeight="bold" mb={2}>
-                    It's your turn! change a word!!
-                  </Text>
-                  <HStack>
-                    <FormControl id="term" isInvalid={!!formik.errors.term}>
-                      <Input
-                        name="term"
-                        onChange={formik.handleChange}
-                        value={formik.values.term}
-                      />
-                      <FormErrorMessage>{formik.errors.term}</FormErrorMessage>
-                    </FormControl>
-                    <Button type="submit" isLoading={isLoading}>
-                      Submit
-                    </Button>
-                  </HStack>
-                </form>
-              ) : (
-                <Text fontWeight="bold">It's not your turn just yet...</Text>
-              )}
-            </>
-          ) : (
-            <Text fontWeight="bold">
-              Game already in progress, feel free to spectate...
-            </Text>
-          )}
-          <VStack pt={8} alignItems="flex-start">
-            {game.entries.data?.map((entry) => (
-              <Box key={entry.id}>
-                <Text>
-                  {entry.term1} {entry.term2} {entry.term3}
-                </Text>
-                <Box
-                  as="img"
-                  maxW="full"
-                  src={`https://media.giphy.com/media/${entry.giphyId}/giphy.gif`}
-                />
-              </Box>
-            ))}
-          </VStack>
-        </Box>
-        <Box w="200px" position="sticky" top={4}>
+      <Stack direction={{ base: 'column', md: 'row-reverse' }} spacing={0}>
+        <Box w="200px" ml={{ base: 0, md: 4 }} mb={4}>
           <Card>
             {game.users.data?.map((user) => {
               const isTurn = user.id === game.turnUser.id;
@@ -143,7 +101,58 @@ export const Play = ({ game }: Props): JSX.Element => {
             })}
           </Card>
         </Box>
-      </HStack>
+        <Box flex="1">
+          {user ? (
+            <>
+              {user?.id === game.turnUser.id ? (
+                <form onSubmit={formik.handleSubmit}>
+                  <Text fontWeight="bold" mb={2}>
+                    You're up, change one word...
+                  </Text>
+                  <HStack>
+                    <FormControl id="term" isInvalid={!!formik.errors.term}>
+                      <Input
+                        name="term"
+                        onChange={formik.handleChange}
+                        value={formik.values.term}
+                      />
+                      <FormErrorMessage>{formik.errors.term}</FormErrorMessage>
+                    </FormControl>
+                    <Button type="submit" isLoading={isLoading}>
+                      Submit
+                    </Button>
+                  </HStack>
+                </form>
+              ) : (
+                <Alert status="warning">
+                  <AlertTitle>It's not your turn just yet...</AlertTitle>
+                </Alert>
+              )}
+            </>
+          ) : (
+            <Alert status="warning">
+              <AlertTitle>Game already in progress</AlertTitle>
+              <AlertDescription>
+                Feel free to stay and spectate...
+              </AlertDescription>
+            </Alert>
+          )}
+          <VStack pt={4} alignItems="flex-start">
+            {game.entries.data?.map((entry) => (
+              <Box key={entry.id}>
+                <Text>
+                  {entry.term1} {entry.term2} {entry.term3}
+                </Text>
+                <Box
+                  as="img"
+                  maxW="full"
+                  src={`https://media.giphy.com/media/${entry.giphyId}/giphy.gif`}
+                />
+              </Box>
+            ))}
+          </VStack>
+        </Box>
+      </Stack>
     </Container>
   );
 };
