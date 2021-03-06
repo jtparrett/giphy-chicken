@@ -35,11 +35,6 @@ const HowTo = (): JSX.Element => (
         </Link>
       </Text>
 
-      <NextLink href="/create-game" passHref>
-        <Button as="a" colorScheme="blue">
-          Start a new game
-        </Button>
-      </NextLink>
       <NextLink href="/" passHref>
         <Button as="a" leftIcon={<FiArrowLeft />}>
           Return home
