@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import qs from 'query-string';
 
 import { Entry } from '../../../../types';
 import { client, q } from '../../../../utils';
@@ -57,11 +58,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     [`term${body.termIndex}`]: body.term,
   };
 
+  const params = qs.stringify({
+    api_key: '8O4q2ZMfKYwAuYS9d9IPrqvHbaqoTFYG',
+    limit: 1,
+    offset: Math.floor(Math.random() * 100),
+    q: `${newTerms.term1} ${newTerms.term2} ${newTerms.term2}`,
+  });
+
   const gifs = await fetch(
-    `https://api.giphy.com/v1/gifs/search?api_key=8O4q2ZMfKYwAuYS9d9IPrqvHbaqoTFYG&limit=100&q=${newTerms.term1}%20${newTerms.term2}%20${newTerms.term3}`
+    `https://api.giphy.com/v1/gifs/search?${params}`
   ).then((r) => r.json());
 
-  const gifIndex = Math.floor(Math.random() * 100);
+  const [gif] = gifs.data;
 
   const entry = await client.query(
     q.Select(
@@ -70,7 +78,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           ...newTerms,
           game: gameRef,
-          giphyId: gifs.data[gifIndex].id,
+          giphyId: gif.id,
+          giphyRating: gif.rating,
         },
       })
     )

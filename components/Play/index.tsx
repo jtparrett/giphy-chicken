@@ -60,15 +60,15 @@ export const Play = ({ game }: Props): JSX.Element => {
     onSubmit({ term }) {
       const terms = term.split(' ');
       const { term1, term2, term3 } = entry;
-      const diff = [term1, term2, term3].map((t) => terms.includes(t));
+      const diff = [term1, term2, term3].map((t, i) => t !== terms[i]);
       const diffCount = diff.filter(Boolean).length;
 
-      if (diffCount !== 2) {
+      if (diffCount !== 1) {
         formik.setFieldError('term', 'One word must be changed.');
         return;
       }
 
-      const index = diff.indexOf(false);
+      const index = diff.indexOf(true);
 
       mutate({
         termIndex: index + 1,
