@@ -23,7 +23,7 @@ const HowTo = (): JSX.Element => (
         increasingly more inappropriate, the term will then reveal a matching
         Giphy with a specified rating. Giphy Chicken has no winners, only a
         single loser who will be titled as such once their term becomes so
-        inappropriate as to return a PG-13 NSFW Giphy.
+        inappropriate as to return an "R" rated Giphy.
       </Text>
 
       <Text>Giphy Chicken is best played with a group of colleagues.</Text>

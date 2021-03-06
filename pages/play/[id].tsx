@@ -20,7 +20,18 @@ const PlayID = (): JSX.Element => {
     }
   );
 
-  if (data?.state === GAME_STATES.PLAYING) {
+  if (isLoading) {
+    return (
+      <Container textAlign="center" py={10}>
+        <Spinner size="xl" color="blue.500" />
+      </Container>
+    );
+  }
+
+  if (
+    data?.state === GAME_STATES.PLAYING ||
+    data?.state === GAME_STATES.FINISHED
+  ) {
     return <Play game={data} />;
   }
 
@@ -30,14 +41,6 @@ const PlayID = (): JSX.Element => {
 
   if (data?.state === GAME_STATES.UNSTARTED) {
     return <WaitingRoom game={data} />;
-  }
-
-  if (isLoading) {
-    return (
-      <Container textAlign="center" py={10}>
-        <Spinner size="xl" color="blue.500" />
-      </Container>
-    );
   }
 
   return <Error statusCode={404} />;
