@@ -24,12 +24,27 @@ export const getGame = async (id: string) => {
         q.Match(q.Index('entries_by_game'), q.Ref(q.Collection('games'), id))
       ),
       q.Lambda(
-        'entry',
-        q.Merge(
+        'entryRef',
+        q.Let(
           {
-            id: q.Select(['ref', 'id'], q.Get(q.Var('entry'))),
+            entry: q.Get(q.Var('entryRef')),
           },
-          q.Select(['data'], q.Get(q.Var('entry')))
+          q.Merge(
+            {
+              id: q.Select(['ref', 'id'], q.Var('entry')),
+              userName: q.If(
+                q.Not(
+                  q.IsNull(q.Select(['data', 'user'], q.Var('entry'), null))
+                ),
+                q.Select(
+                  ['data', 'name'],
+                  q.Get(q.Select(['data', 'user'], q.Var('entry')))
+                ),
+                null
+              ),
+            },
+            q.Select(['data'], q.Var('entry'))
+          )
         )
       )
     )

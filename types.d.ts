@@ -13,7 +13,7 @@ export interface Entry {
   term3: string;
   giphyId: string;
   giphyRating: string;
-  user: User;
+  userName?: string;
 }
 
 export interface Game {

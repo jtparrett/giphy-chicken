@@ -47,6 +47,7 @@ export const Play = ({ game }: Props): JSX.Element => {
         body: JSON.stringify({
           term,
           termIndex,
+          userId,
         }),
       }).then((r) => r.json()),
     {
@@ -161,7 +162,8 @@ export const Play = ({ game }: Props): JSX.Element => {
                 }
               >
                 <Text>
-                  {entry.term1} {entry.term2} {entry.term3}
+                  {entry.userName || 'Giphy Chicken'} - {entry.term1}{' '}
+                  {entry.term2} {entry.term3}
                 </Text>
                 <Box
                   as="img"

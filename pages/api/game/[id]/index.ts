@@ -13,7 +13,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const game = await getGame(id);
     res.status(200).json(game);
-  } catch {
-    res.status(404).send('Page not found.');
+  } catch (e) {
+    console.log(e);
+    res.status(500).send('Internal server error');
   }
 };

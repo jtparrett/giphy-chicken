@@ -18,6 +18,7 @@ const PlayMain = ({ gameId }: Props): JSX.Element => {
     ['game', gameId],
     () => fetch(`/api/game/${gameId}`).then((r) => r.json()),
     {
+      retry: false,
       enabled: !!gameId,
       refetchInterval: 5000,
     }

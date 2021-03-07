@@ -30,6 +30,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
+  if (!body.userId) {
+    res.status(500).json({ message: 'Missing userId parameter' });
+    return;
+  }
+
   const gameRef = q.Ref(q.Collection('games'), id);
   const game = await client.query(q.Get(gameRef));
 
@@ -37,6 +42,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(404).send('Page not found.');
     return;
   }
+
+  const userRef = q.Ref(q.Collection('users'), body.userId);
+
+  await client.query(
+    q.If(
+      q.Equals(gameRef, q.Select(['data', 'game'], q.Get(userRef))),
+      null,
+      q.Abort('Invalid userId for gameId')
+    )
+  );
 
   const entries: { data: Entry[] } = await client.query(
     q.Map(
@@ -80,6 +95,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           game: gameRef,
           giphyId: gif.id,
           giphyRating: gif.rating,
+          user: userRef,
         },
       })
     )
