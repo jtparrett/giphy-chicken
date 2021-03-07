@@ -9,6 +9,8 @@ import {
 import NextLink from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 
+import { StartGameButton } from '../components';
+
 const HowTo = (): JSX.Element => (
   <Container as="main" py={10} maxW="400px">
     <VStack alignItems="stretch">
@@ -34,6 +36,8 @@ const HowTo = (): JSX.Element => (
           @JPXSE_
         </Link>
       </Text>
+
+      <StartGameButton />
 
       <NextLink href="/" passHref>
         <Button as="a" leftIcon={<FiArrowLeft />}>
