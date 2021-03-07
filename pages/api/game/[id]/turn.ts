@@ -74,7 +74,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   const params = qs.stringify({
-    api_key: '8O4q2ZMfKYwAuYS9d9IPrqvHbaqoTFYG',
+    api_key: process.env.GIPHY_API_KEY,
     limit: 1,
     offset: Math.floor(Math.random() * 100),
     q: `${newTerms.term1} ${newTerms.term2} ${newTerms.term2}`,
