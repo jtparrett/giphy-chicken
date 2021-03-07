@@ -26,8 +26,8 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
         method: 'POST',
       }).then((r) => r.json()),
     {
-      onSuccess() {
-        queryClient.refetchQueries(['game', game.id]);
+      async onSuccess() {
+        await queryClient.refetchQueries(['game', game.id]);
       },
     }
   );

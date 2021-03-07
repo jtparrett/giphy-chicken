@@ -11,15 +11,12 @@ import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
-import { useUser } from '../../contexts';
+import { useGameUser } from '../../contexts';
+import { User } from '../../types';
 import { queryClient } from '../../utils';
 
 interface Props {
   gameId: string;
-}
-
-interface JoinRes {
-  userId: string;
 }
 
 interface JoinParams {
@@ -31,18 +28,18 @@ const validationSchema = Yup.object().shape({
 });
 
 export const JoinGame = ({ gameId }: Props): JSX.Element => {
-  const { setUser } = useUser();
+  const { setUserId } = useGameUser();
 
-  const { mutate, isLoading } = useMutation<JoinRes, unknown, JoinParams>(
+  const { mutate, isLoading } = useMutation<User, unknown, JoinParams>(
     ({ name }) =>
       fetch(`/api/game/${gameId}/join`, {
         method: 'POST',
         body: JSON.stringify({ name }),
       }).then((r) => r.json()),
     {
-      onSuccess(user) {
-        setUser(user);
-        queryClient.refetchQueries(['game', gameId]);
+      async onSuccess(user) {
+        setUserId(user.id);
+        await queryClient.refetchQueries(['game', gameId]);
       },
     }
   );

@@ -5,17 +5,20 @@ import { Spinner, Container } from '@chakra-ui/react';
 
 import { GAME_STATES } from '../../utils';
 import { JoinGame, WaitingRoom, Play } from '../../components';
-import { useUser } from '../../contexts';
+import { GameUserProvider, useGameUser } from '../../contexts';
 
-const PlayID = (): JSX.Element => {
-  const router = useRouter();
-  const gameId = Array.isArray(router.query.id) ? undefined : router.query.id;
-  const { user } = useUser();
+interface Props {
+  gameId: string;
+}
+
+const PlayMain = ({ gameId }: Props): JSX.Element => {
+  const { userId } = useGameUser();
 
   const { data, isLoading } = useQuery(
     ['game', gameId],
     () => fetch(`/api/game/${gameId}`).then((r) => r.json()),
     {
+      enabled: !!gameId,
       refetchInterval: 5000,
     }
   );
@@ -35,7 +38,7 @@ const PlayID = (): JSX.Element => {
     return <Play game={data} />;
   }
 
-  if (!user) {
+  if (!userId) {
     return <JoinGame gameId={gameId} />;
   }
 
@@ -44,6 +47,17 @@ const PlayID = (): JSX.Element => {
   }
 
   return <Error statusCode={404} />;
+};
+
+const PlayID = (): JSX.Element => {
+  const router = useRouter();
+  const gameId = Array.isArray(router.query.id) ? undefined : router.query.id;
+
+  return (
+    <GameUserProvider gameId={gameId}>
+      <PlayMain gameId={gameId} />
+    </GameUserProvider>
+  );
 };
 
 export default PlayID;

@@ -21,7 +21,7 @@ import { useFormik } from 'formik';
 import { Game } from '../../types';
 import { Card } from '../Card';
 import { useMemo } from 'react';
-import { useUser } from '../../contexts';
+import { useGameUser } from '../../contexts';
 import { GAME_STATES, queryClient } from '../../utils';
 
 interface Props {
@@ -34,7 +34,7 @@ interface TurnParams {
 }
 
 export const Play = ({ game }: Props): JSX.Element => {
-  const { user } = useUser();
+  const { userId } = useGameUser();
   const entry = game.entries.data[0];
   const term = useMemo(() => {
     return `${entry.term1} ${entry.term2} ${entry.term3}`;
@@ -50,8 +50,8 @@ export const Play = ({ game }: Props): JSX.Element => {
         }),
       }).then((r) => r.json()),
     {
-      onSuccess() {
-        queryClient.refetchQueries(['game', game.id]);
+      async onSuccess() {
+        await queryClient.refetchQueries(['game', game.id]);
       },
     }
   );
@@ -110,9 +110,9 @@ export const Play = ({ game }: Props): JSX.Element => {
 
           {game.state === GAME_STATES.PLAYING && (
             <>
-              {user ? (
+              {userId ? (
                 <>
-                  {user?.id === game.turnUser.id ? (
+                  {userId === game.turnUser.id ? (
                     <form onSubmit={formik.handleSubmit}>
                       <Text fontWeight="bold" mb={2}>
                         You're up, change one word...
