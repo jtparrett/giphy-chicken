@@ -163,7 +163,8 @@ export const Play = ({ game }: Props): JSX.Element => {
               >
                 <Text>
                   {entry.userName || 'Giphy Chicken'} - {entry.term1}{' '}
-                  {entry.term2} {entry.term3}
+                  {entry.term2} {entry.term3} - Rating{' '}
+                  {(entry.giphyRating || 'g').toUpperCase()}
                 </Text>
                 <Box
                   as="img"
