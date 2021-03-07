@@ -129,7 +129,11 @@ export const Play = ({ game }: Props): JSX.Element => {
                             {formik.errors.term}
                           </FormErrorMessage>
                         </FormControl>
-                        <Button type="submit" isLoading={isLoading}>
+                        <Button
+                          type="submit"
+                          isLoading={isLoading}
+                          colorScheme="blue"
+                        >
                           Submit
                         </Button>
                       </HStack>

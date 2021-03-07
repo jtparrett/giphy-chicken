@@ -4,3 +4,4 @@ export * from './Logo';
 export * from './Play';
 export * from './WaitingRoom';
 export * from './StartGameButton';
+export * from './HowTo';

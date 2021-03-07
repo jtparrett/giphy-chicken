@@ -8,6 +8,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
+import NextLink from 'next/link';
 
 import { Card } from '../Card';
 import { Game } from '../../types';
@@ -44,6 +45,12 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
             </Link>
           </Text>
         </Alert>
+
+        <NextLink href={`/play/${game.id}/how-to`} passHref>
+          <Button mt={2} width="full" as="a">
+            How to play?
+          </Button>
+        </NextLink>
 
         <Card>
           <Heading as="h1" size="md" mb={2}>

@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Error from 'next/error';
 import { useQuery } from 'react-query';
 import { Spinner, Container } from '@chakra-ui/react';
 
-import { GAME_STATES } from '../../utils';
-import { JoinGame, WaitingRoom, Play } from '../../components';
-import { GameUserProvider, useGameUser } from '../../contexts';
+import { GAME_STATES } from '../../../utils';
+import { JoinGame, WaitingRoom, Play } from '../../../components';
+import { GameUserProvider, useGameUser } from '../../../contexts';
 
 interface Props {
   gameId: string;
