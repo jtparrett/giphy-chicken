@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Error from 'next/error';
 import { useQuery } from 'react-query';
@@ -13,6 +14,7 @@ interface Props {
 
 const PlayMain = ({ gameId }: Props): JSX.Element => {
   const { userId } = useGameUser();
+  const [gameOver, setGameOver] = useState(false);
 
   const { data, isLoading } = useQuery(
     ['game', gameId],
@@ -20,7 +22,12 @@ const PlayMain = ({ gameId }: Props): JSX.Element => {
     {
       retry: false,
       enabled: !!gameId,
-      refetchInterval: 5000,
+      refetchInterval: gameOver ? false : 5000,
+      onSuccess(data) {
+        if (data.state === GAME_STATES.FINISHED) {
+          setGameOver(true);
+        }
+      },
     }
   );
 
