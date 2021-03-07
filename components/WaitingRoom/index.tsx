@@ -46,12 +46,6 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
           </Text>
         </Alert>
 
-        <NextLink href={`/play/${game.id}/how-to`} passHref>
-          <Button mt={2} width="full" as="a">
-            How to play?
-          </Button>
-        </NextLink>
-
         <Card>
           <Heading as="h1" size="md" mb={2}>
             Waiting for players...
@@ -60,6 +54,12 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
             <Text key={user.id}>{user.name}</Text>
           ))}
         </Card>
+
+        <NextLink href={`/play/${game.id}/how-to`} passHref>
+          <Button mt={2} width="full" as="a">
+            How to play?
+          </Button>
+        </NextLink>
 
         <Button
           colorScheme="blue"
