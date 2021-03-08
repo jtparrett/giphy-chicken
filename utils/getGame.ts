@@ -21,7 +21,10 @@ export const getGame = async (id: string) => {
   const entries: { data: Entry[] } = await client.query(
     q.Map(
       q.Paginate(
-        q.Match(q.Index('entries_by_game'), q.Ref(q.Collection('games'), id))
+        q.Match(q.Index('entries_by_game'), q.Ref(q.Collection('games'), id)),
+        {
+          size: 4000,
+        }
       ),
       q.Lambda(
         'entryRef',
