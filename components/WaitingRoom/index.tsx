@@ -6,20 +6,20 @@ import {
   VStack,
   Alert,
   Link,
-} from '@chakra-ui/react';
-import { useMutation } from 'react-query';
-import NextLink from 'next/link';
+} from '@chakra-ui/react'
+import { useMutation } from 'react-query'
+import NextLink from 'next/link'
 
-import { Card } from '../Card';
-import { Game } from '../../types';
-import { queryClient } from '../../utils';
+import { Card } from '../Card'
+import { Game } from '../../types'
+import { queryClient } from '../../utils'
 
 interface Props {
-  game: Game;
+  game: Game
 }
 
 export const WaitingRoom = ({ game }: Props): JSX.Element => {
-  const GameLink = `https://giphychicken.com/play/${game.id}`;
+  const GameLink = `https://giphychicken.com/play/${game.id}`
 
   const { mutate, isLoading } = useMutation(
     () =>
@@ -28,10 +28,10 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
       }).then((r) => r.json()),
     {
       async onSuccess() {
-        await queryClient.refetchQueries(['game', game.id]);
+        await queryClient.refetchQueries(['game', game.id])
       },
     }
-  );
+  )
 
   return (
     <Container py={10} as="main">
@@ -70,5 +70,5 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
         </Button>
       </VStack>
     </Container>
-  );
-};
+  )
+}

@@ -1,5 +1,5 @@
-import { Box, Button, Text } from '@chakra-ui/react';
-import { Card } from '../Card';
+import { Box, Button, Text } from '@chakra-ui/react'
+import { Card } from '../Card'
 
 export const Donate = (): JSX.Element => (
   <Box mt={2}>
@@ -20,4 +20,4 @@ export const Donate = (): JSX.Element => (
       </form>
     </Card>
   </Box>
-);
+)

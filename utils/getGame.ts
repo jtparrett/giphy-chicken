@@ -1,10 +1,10 @@
-import { Entry, User } from '../types';
-import { client, q } from './fauna';
+import { Entry, User } from '../types'
+import { client, q } from './fauna'
 
 export const getGame = async (id: string) => {
   const gameData = await client.query(
     q.Select(['data'], q.Get(q.Ref(q.Collection('games'), id)))
-  );
+  )
 
   const users: { data: User[] } = await client.query(
     q.Map(
@@ -16,7 +16,7 @@ export const getGame = async (id: string) => {
         name: q.Select(['data', 'name'], q.Get(q.Var('user'))),
       })
     )
-  );
+  )
 
   const entries: { data: Entry[] } = await client.query(
     q.Map(
@@ -51,9 +51,9 @@ export const getGame = async (id: string) => {
         )
       )
     )
-  );
+  )
 
-  const turnUser = users.data[entries.data.length % users.data.length];
+  const turnUser = users.data[entries.data.length % users.data.length]
 
   return {
     id,
@@ -61,5 +61,5 @@ export const getGame = async (id: string) => {
     entries,
     users,
     turnUser,
-  };
-};
+  }
+}

@@ -1,7 +1,7 @@
-import { Button, Container, VStack, Text } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Button, Container, VStack, Text } from '@chakra-ui/react'
+import Link from 'next/link'
 
-import { Logo, StartGameButton } from '../components';
+import { Logo, StartGameButton } from '../components'
 
 const Home = (): JSX.Element => (
   <Container maxW="320px" py={10}>
@@ -14,6 +14,6 @@ const Home = (): JSX.Element => (
       <StartGameButton />
     </VStack>
   </Container>
-);
+)
 
-export default Home;
+export default Home

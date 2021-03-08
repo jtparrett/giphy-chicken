@@ -1,8 +1,8 @@
-import { Container, Button } from '@chakra-ui/react';
-import NextLink from 'next/link';
-import { FiArrowLeft } from 'react-icons/fi';
+import { Container, Button } from '@chakra-ui/react'
+import NextLink from 'next/link'
+import { FiArrowLeft } from 'react-icons/fi'
 
-import { StartGameButton, HowTo } from '../components';
+import { StartGameButton, HowTo } from '../components'
 
 const HowToPage = (): JSX.Element => (
   <Container as="main" py={10} maxW="400px">
@@ -16,6 +16,6 @@ const HowToPage = (): JSX.Element => (
       </Button>
     </NextLink>
   </Container>
-);
+)
 
-export default HowToPage;
+export default HowToPage

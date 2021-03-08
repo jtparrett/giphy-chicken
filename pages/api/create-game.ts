@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { client, q, GAME_STATES } from '../../utils';
-import randomWords from 'random-words';
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { client, q, GAME_STATES } from '../../utils'
+import randomWords from 'random-words'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
-    res.status(404).send('POST requests only.');
-    return;
+    res.status(404).send('POST requests only.')
+    return
   }
 
   const gameId = await client.query(
@@ -17,9 +17,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
     )
-  );
+  )
 
-  const [term1, term2, term3] = randomWords(3);
+  const [term1, term2, term3] = randomWords(3)
 
   await client.query(
     q.Create(q.Collection('entries'), {
@@ -31,9 +31,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         giphyId: 'xT8qB2zDVGj7ly4moU',
       },
     })
-  );
+  )
 
   res.status(200).json({
     gameId,
-  });
-};
+  })
+}

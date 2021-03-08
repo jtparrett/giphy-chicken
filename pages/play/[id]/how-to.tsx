@@ -5,16 +5,16 @@ import {
   VStack,
   Button,
   Link,
-} from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import NextLink from 'next/link';
-import { FiArrowLeft } from 'react-icons/fi';
+} from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import NextLink from 'next/link'
+import { FiArrowLeft } from 'react-icons/fi'
 
-import { HowTo } from '../../../components';
+import { HowTo } from '../../../components'
 
 const PlayHowTo = (): JSX.Element => {
-  const router = useRouter();
-  const gameId = Array.isArray(router.query.id) ? undefined : router.query.id;
+  const router = useRouter()
+  const gameId = Array.isArray(router.query.id) ? undefined : router.query.id
 
   return (
     <Container as="main" py={10} maxW="400px">
@@ -26,7 +26,7 @@ const PlayHowTo = (): JSX.Element => {
         </Button>
       </NextLink>
     </Container>
-  );
-};
+  )
+}
 
-export default PlayHowTo;
+export default PlayHowTo
