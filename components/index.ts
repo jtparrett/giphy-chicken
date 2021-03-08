@@ -5,3 +5,4 @@ export * from './Play';
 export * from './WaitingRoom';
 export * from './StartGameButton';
 export * from './HowTo';
+export * from './Donate';

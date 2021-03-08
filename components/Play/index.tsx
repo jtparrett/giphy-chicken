@@ -24,6 +24,7 @@ import { useMemo } from 'react';
 import { useGameUser } from '../../contexts';
 import { GAME_STATES, queryClient } from '../../utils';
 import { StartGameButton } from '../StartGameButton';
+import { Donate } from '../Donate';
 
 interface Props {
   game: Game;
@@ -102,6 +103,8 @@ export const Play = ({ game }: Props): JSX.Element => {
               );
             })}
           </Card>
+
+          <Donate />
         </Box>
         <Box flex="1">
           {game.state === GAME_STATES.FINISHED && (
