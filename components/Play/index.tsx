@@ -23,6 +23,7 @@ import { Card } from '../Card';
 import { useMemo } from 'react';
 import { useGameUser } from '../../contexts';
 import { GAME_STATES, queryClient } from '../../utils';
+import { StartGameButton } from '../StartGameButton';
 
 interface Props {
   game: Game;
@@ -104,9 +105,12 @@ export const Play = ({ game }: Props): JSX.Element => {
         </Box>
         <Box flex="1">
           {game.state === GAME_STATES.FINISHED && (
-            <Alert status="error">
-              <AlertTitle>GAME OVER!!!!!!</AlertTitle>
-            </Alert>
+            <>
+              <StartGameButton />
+              <Alert status="error" mt={4}>
+                <AlertTitle>GAME OVER!!!!!!</AlertTitle>
+              </Alert>
+            </>
           )}
 
           {game.state === GAME_STATES.PLAYING && (

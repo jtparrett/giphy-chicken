@@ -19,7 +19,12 @@ export const GameUserProvider = ({ children, gameId }: Props): JSX.Element => {
 
   useEffect(() => {
     const token = localStorage.getItem(storageId);
-    if (token) updateUserId(token);
+    if (token) {
+      updateUserId(token);
+      return;
+    }
+
+    updateUserId(null);
   }, [gameId]);
 
   const setUserId = (id: string) => {
