@@ -1,4 +1,4 @@
-import { Text, Heading, VStack, Link } from '@chakra-ui/react';
+import { Text, Heading, VStack, Link } from '@chakra-ui/react'
 
 export const HowTo = (): JSX.Element => (
   <VStack alignItems="stretch">
@@ -25,4 +25,4 @@ export const HowTo = (): JSX.Element => (
       </Link>
     </Text>
   </VStack>
-);
+)

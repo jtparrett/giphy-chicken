@@ -13,34 +13,34 @@ import {
   Alert,
   AlertTitle,
   AlertDescription,
-} from '@chakra-ui/react';
-import { useMutation } from 'react-query';
-import { GiChicken } from 'react-icons/gi';
-import { useFormik } from 'formik';
+} from '@chakra-ui/react'
+import { useMutation } from 'react-query'
+import { GiChicken } from 'react-icons/gi'
+import { useFormik } from 'formik'
 
-import { Game } from '../../types';
-import { Card } from '../Card';
-import { useMemo } from 'react';
-import { useGameUser } from '../../contexts';
-import { GAME_STATES, queryClient } from '../../utils';
-import { StartGameButton } from '../StartGameButton';
-import { Donate } from '../Donate';
+import { Game } from '../../types'
+import { Card } from '../Card'
+import { useMemo } from 'react'
+import { useGameUser } from '../../contexts'
+import { GAME_STATES, queryClient } from '../../utils'
+import { StartGameButton } from '../StartGameButton'
+import { Donate } from '../Donate'
 
 interface Props {
-  game: Game;
+  game: Game
 }
 
 interface TurnParams {
-  term: string;
-  termIndex: number;
+  term: string
+  termIndex: number
 }
 
 export const Play = ({ game }: Props): JSX.Element => {
-  const { userId } = useGameUser();
-  const entry = game.entries.data[0];
+  const { userId } = useGameUser()
+  const entry = game.entries.data[0]
   const term = useMemo(() => {
-    return `${entry.term1} ${entry.term2} ${entry.term3}`;
-  }, [entry]);
+    return `${entry.term1} ${entry.term2} ${entry.term3}`
+  }, [entry])
 
   const { mutate, isLoading } = useMutation<Game, unknown, TurnParams>(
     ({ term, termIndex }) =>
@@ -54,10 +54,10 @@ export const Play = ({ game }: Props): JSX.Element => {
       }).then((r) => r.json()),
     {
       async onSuccess() {
-        await queryClient.refetchQueries(['game', game.id]);
+        await queryClient.refetchQueries(['game', game.id])
       },
     }
-  );
+  )
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -65,24 +65,24 @@ export const Play = ({ game }: Props): JSX.Element => {
       term,
     },
     onSubmit({ term }) {
-      const terms = term.split(' ');
-      const { term1, term2, term3 } = entry;
-      const diff = [term1, term2, term3].map((t, i) => t !== terms[i]);
-      const diffCount = diff.filter(Boolean).length;
+      const terms = term.split(' ')
+      const { term1, term2, term3 } = entry
+      const diff = [term1, term2, term3].map((t, i) => t !== terms[i])
+      const diffCount = diff.filter(Boolean).length
 
       if (diffCount !== 1) {
-        formik.setFieldError('term', 'One word must be changed.');
-        return;
+        formik.setFieldError('term', 'One word must be changed.')
+        return
       }
 
-      const index = diff.indexOf(true);
+      const index = diff.indexOf(true)
 
       mutate({
         termIndex: index + 1,
         term: terms[index],
-      });
+      })
     },
-  });
+  })
 
   return (
     <Container py={10} maxW="720px">
@@ -90,7 +90,7 @@ export const Play = ({ game }: Props): JSX.Element => {
         <Box w="200px" ml={{ base: 0, md: 4 }} mb={4}>
           <Card>
             {game.users.data?.map((user) => {
-              const isTurn = user.id === game.turnUser.id;
+              const isTurn = user.id === game.turnUser.id
               return (
                 <Text
                   key={user.id}
@@ -100,7 +100,7 @@ export const Play = ({ game }: Props): JSX.Element => {
                   {isTurn && <Icon as={GiChicken} mr={1} />}
                   {user.name}
                 </Text>
-              );
+              )
             })}
           </Card>
 
@@ -188,5 +188,5 @@ export const Play = ({ game }: Props): JSX.Element => {
         </Box>
       </Stack>
     </Container>
-  );
-};
+  )
+}
