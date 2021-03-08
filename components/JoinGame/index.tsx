@@ -6,29 +6,29 @@ import {
   Input,
   FormErrorMessage,
   Button,
-} from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { useMutation } from 'react-query';
-import * as Yup from 'yup';
+} from '@chakra-ui/react'
+import { useFormik } from 'formik'
+import { useMutation } from 'react-query'
+import * as Yup from 'yup'
 
-import { useGameUser } from '../../contexts';
-import { User } from '../../types';
-import { queryClient } from '../../utils';
+import { useGameUser } from '../../contexts'
+import { User } from '../../types'
+import { queryClient } from '../../utils'
 
 interface Props {
-  gameId: string;
+  gameId: string
 }
 
 interface JoinParams {
-  name: string;
+  name: string
 }
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('You must supply a name to play!'),
-});
+})
 
 export const JoinGame = ({ gameId }: Props): JSX.Element => {
-  const { setUserId } = useGameUser();
+  const { setUserId } = useGameUser()
 
   const { mutate, isLoading } = useMutation<User, unknown, JoinParams>(
     ({ name }) =>
@@ -38,11 +38,11 @@ export const JoinGame = ({ gameId }: Props): JSX.Element => {
       }).then((r) => r.json()),
     {
       async onSuccess(user) {
-        setUserId(user.id);
-        await queryClient.refetchQueries(['game', gameId]);
+        setUserId(user.id)
+        await queryClient.refetchQueries(['game', gameId])
       },
     }
-  );
+  )
 
   const formik = useFormik({
     validationSchema,
@@ -50,9 +50,9 @@ export const JoinGame = ({ gameId }: Props): JSX.Element => {
       name: '',
     },
     onSubmit: ({ name }) => {
-      mutate({ name });
+      mutate({ name })
     },
-  });
+  })
 
   return (
     <Container as="main" py={10} maxW="380px">
@@ -76,5 +76,5 @@ export const JoinGame = ({ gameId }: Props): JSX.Element => {
         </VStack>
       </form>
     </Container>
-  );
-};
+  )
+}

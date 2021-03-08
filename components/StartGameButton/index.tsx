@@ -1,9 +1,9 @@
-import { useMutation } from 'react-query';
-import { useRouter } from 'next/router';
-import { Button } from '@chakra-ui/react';
+import { useMutation } from 'react-query'
+import { useRouter } from 'next/router'
+import { Button } from '@chakra-ui/react'
 
 export const StartGameButton = (): JSX.Element => {
-  const router = useRouter();
+  const router = useRouter()
 
   const { mutate, isLoading } = useMutation(
     () =>
@@ -12,10 +12,10 @@ export const StartGameButton = (): JSX.Element => {
       }).then((r) => r.json()),
     {
       onSuccess({ gameId }) {
-        router.push(`/play/${gameId}`);
+        router.push(`/play/${gameId}`)
       },
     }
-  );
+  )
 
   return (
     <Button
@@ -26,5 +26,5 @@ export const StartGameButton = (): JSX.Element => {
     >
       Start a new game
     </Button>
-  );
-};
+  )
+}

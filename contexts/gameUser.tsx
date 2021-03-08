@@ -4,39 +4,39 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'react';
+} from 'react'
 
-const Context = createContext(null);
+const Context = createContext(null)
 
 interface Props {
-  children?: ReactNode;
-  gameId: string;
+  children?: ReactNode
+  gameId: string
 }
 
 export const GameUserProvider = ({ children, gameId }: Props): JSX.Element => {
-  const storageId = `user_${gameId}`;
-  const [userId, updateUserId] = useState(null);
+  const storageId = `user_${gameId}`
+  const [userId, updateUserId] = useState(null)
 
   useEffect(() => {
-    const token = localStorage.getItem(storageId);
+    const token = localStorage.getItem(storageId)
     if (token) {
-      updateUserId(token);
-      return;
+      updateUserId(token)
+      return
     }
 
-    updateUserId(null);
-  }, [gameId]);
+    updateUserId(null)
+  }, [gameId])
 
   const setUserId = (id: string) => {
-    localStorage.setItem(storageId, id);
-    updateUserId(id);
-  };
+    localStorage.setItem(storageId, id)
+    updateUserId(id)
+  }
 
   return (
     <Context.Provider value={{ userId, setUserId }}>
       {children}
     </Context.Provider>
-  );
-};
+  )
+}
 
-export const useGameUser = () => useContext(Context);
+export const useGameUser = () => useContext(Context)
