@@ -139,6 +139,7 @@ export const Play = ({ game }: Props): JSX.Element => {
                         <Button
                           type="submit"
                           isLoading={isLoading}
+                          disabled={isLoading}
                           colorScheme="blue"
                         >
                           Submit
