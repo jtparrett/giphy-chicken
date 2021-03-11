@@ -21,6 +21,7 @@ export const StartGameButton = (): JSX.Element => {
     <Button
       onClick={() => mutate()}
       isLoading={isLoading}
+      disabled={isLoading}
       colorScheme="blue"
       width="full"
     >

@@ -77,6 +77,7 @@ export const WaitingRoom = ({ game }: Props): JSX.Element => {
         <Button
           colorScheme="blue"
           isLoading={isLoading}
+          disabled={isLoading}
           onClick={() => mutate()}
         >
           Start Game
